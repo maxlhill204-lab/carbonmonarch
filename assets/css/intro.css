@@ -1,0 +1,137 @@
+/* Cinematic intro overlay */
+.hero-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+  pointer-events: all;
+}
+
+.intro-black {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  z-index: 1;
+  transition: opacity 1.2s ease;
+}
+
+.intro-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(120px, 22vw, 220px);
+  height: auto;
+  object-fit: contain;
+  transform: translate(-50%, -50%) scale(0.92);
+  opacity: 0;
+  z-index: 2;
+  transition: opacity 1.2s ease, transform 1.2s ease;
+  filter: drop-shadow(0 12px 40px rgba(0, 0, 0, 0.45));
+}
+
+.hero-intro-overlay.logo-visible .intro-logo {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.hero-intro-overlay.logo-exit .intro-logo {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1);
+  transition-duration: 1s;
+}
+
+
+.hero-intro-overlay.overlay-exit {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+}
+
+/* Hide all page chrome during intro */
+body.intro-mode {
+  overflow: hidden;
+}
+
+body.intro-mode .site-shell,
+body.intro-mode .promo-marquee {
+  opacity: 0;
+  visibility: hidden;
+}
+
+body.intro-content-visible .site-shell,
+body.intro-content-visible .promo-marquee {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 1.5s ease, visibility 0s;
+}
+
+body.intro-content-visible .hero .reveal {
+  opacity: 1;
+  transform: none;
+}
+
+body.intro-complete {
+  overflow: auto;
+}
+
+/* Hero section - full viewport cinematic background */
+body[data-page="home"] .hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 0;
+  overflow: hidden;
+}
+
+body[data-page="home"] .hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('../images/hero/hero-background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  transform: scale(var(--hero-zoom, 1));
+  transition: transform 0.15s ease-out;
+  will-change: transform;
+}
+
+body[data-page="home"] .hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 7, 11, 0.55) 0%,
+    rgba(5, 7, 11, 0.35) 40%,
+    rgba(5, 7, 11, 0.72) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+body[data-page="home"] .hero-grid {
+  position: relative;
+  z-index: 1;
+  padding-top: 7rem;
+  padding-bottom: 4rem;
+}
+
+@media (max-width: 768px) {
+  body[data-page="home"] .hero-grid {
+    padding-top: 5rem;
+    padding-bottom: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-logo,
+  .intro-black,
+  .hero-intro-overlay.overlay-exit,
+  body.intro-content-visible .site-shell,
+  body.intro-content-visible .promo-marquee {
+    transition: none !important;
+  }
+}
